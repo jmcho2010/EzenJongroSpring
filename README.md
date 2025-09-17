@@ -1,1 +1,1 @@
-# EzenJongroSpring
+이젠 종로점 수업을 위해 준비된 코드
