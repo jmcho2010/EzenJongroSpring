@@ -454,7 +454,7 @@ public class TestApplication {
 	// -> UserDetailsService에서 명단 조회(회원정보검색) 
 	// -> Authentication 객체 생성 및 SecurityContext에 저장
 	// -> AccessDecisionManager가 접근 권한 확인 -> 최종적으로 작업 접근 허용/거부
-	
+	 
 	// 시큐리티의 인증 처리
 	//  -> 원래는 서블릿이 처리해야하지만 시큐리티가 요청을 받아오는거임.
 	//     시큐리티의 의존성 주입이 처리되는 순간부터 서블릿에서 시큐리티로 요청에대해 위임해버림.
