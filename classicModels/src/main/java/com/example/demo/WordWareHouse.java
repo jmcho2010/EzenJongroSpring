@@ -214,13 +214,31 @@ public class WordWareHouse {
 		// 4. isCredentialsNonExpired() : 비밀번호 만료여부 확인.
 		// 5. isEnabled() : 이 계정이 활성화 상태인지 확인.
 		
+		// AuthenticationManager, AuthenticationProvider
+		// AuthenticationManager는 인증요청을 직접 처리하진 않음.
+		//  -> 전문적으로 인증 요청을 처리하는 AuthenticationProvider에 위임하는 역할.
 		
 		
+		// 인증 심사의 작동순서.
+		// AuthenticationManager : 문지기
+		// 1.
+		// 문지기 필터(UsernamePasswordAuthenticationFilter) 미인증상태의 
+		// Authentication 객체를 생성해서 AuthenticationManager에 전달
+		// 2. AuthenticationManager의 표준 구현체가 있는데 그것이 ProviderManager인데
+		//    -> ProviderManager는 자신이 관리중인 AuthenticationProvider의 목록을 순회.
+		// 3. 각각의 Provider 객체에 인증을 처리해줄수 있는지 물음.
+		// 4. 처리가 가능한 Provider 객체를 찾으면 인증을 위임(authenticate 메서드)
+		// 5. 인증에 성공하면 Provider는 정보가 완벽히 채워진 Authentication 객체를 리턴.
+		//     -> 인증 실패시에는 예외가 발생.
 		
-		
-		
-		
-		
+		//인터페이스 설명.
+		// 1. AuthenticationProvider(UserSecurityService에 사용예시 추가)
+		//    - authenticate(Authentication a) / 해당객체를 기반으로 인증로직을 처리. 
+		//    - supports() : 이 Provider가 어떤 종류의 authentication 토큰을 처리할수 있는지
+		//       boolean 타입으로 알려주는 메서드.
+		// 2. AuthenticationManager
+		//   - authenticate() : 인증을 처리하는 유일한 메서드. 
+		//     내부적으로 적절한 Provider를 서치후 인증위임
 		
 		
 		

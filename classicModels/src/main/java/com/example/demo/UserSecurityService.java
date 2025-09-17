@@ -23,6 +23,21 @@ public class UserSecurityService implements UserDetailsService{
 	public UserSecurityService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
+	
+//	@Override
+//	public Authentication authenticate(Authentication auth) throws AuthenticationException {
+//	    String username = auth.getName();
+//	    String password = auth.getCredentials().toString();
+//
+//	    // 사용자 이름과 비밀번호 검증 로직
+//	    if (isValidUser(username, password)) {
+//	        return new UsernamePasswordAuthenticationToken(username, password, getAuthorities(username));
+//	    } else {
+//	        throw new BadCredentialsException("Invalid credentials");
+//	    }
+//	}
+	
+	
 
 	@Override
 	public UserDetails loadUserByUsername(String username) 
