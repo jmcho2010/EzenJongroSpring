@@ -206,10 +206,24 @@ public class WordWareHouse {
 		//      설정하는것도 방법.
 		
 		
-		// 2. isAccountNonExpired
-		// 3. isAccountNonLocked()
-		// 4. isCredentialsNonExpired()
-		// 5. isEnabled()
+		// 2. isAccountNonExpired() : 해당 계정이 만료되지 않았는가 확인
+		//     - 리턴타입은 boolean 
+		//     - true가 리턴되면 계정만료 아니라는 얘기
+		//     - false가 리턴 되면 계정 만료라는 얘기.(인증 거부 상태)
+		// 3. isAccountNonLocked() : 이 계정이 잠금상태인가 확인.
+		// 4. isCredentialsNonExpired() : 비밀번호 만료여부 확인.
+		// 5. isEnabled() : 이 계정이 활성화 상태인지 확인.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
