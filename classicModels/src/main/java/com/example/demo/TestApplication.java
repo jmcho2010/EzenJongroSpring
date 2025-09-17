@@ -386,7 +386,7 @@ public class TestApplication {
 	// 연관 데이터가 필요할 경우에는 FetchJoin이라는 속성을 활용해야함.
 	
 	// 시나리오 12는 아직 끝나지 않음. 지속적으로 활용할 예정.
-	
+	 
 	// 시나리오 13
 	// 시큐리티의 전체 구조 파악과 OAuth2, JWT -> 구글, 카카오 로그인
 	
@@ -443,6 +443,17 @@ public class TestApplication {
 	
 	// 1. SecurityContextHolder 는 기본적으로 아래의 클래스를 사용한다.
 	//   -> ThreadLocalSecurityContextHolderStrategy
+	
+	// 어려우면 일단 이거부터 생각하자.
+	// 시큐리티컨텍스트 전체를 하나의 클럽이라 생각하고 전체적인 클럽의 보안 흐름을 정리.
+	// 손님 도착 -> 신원 확인 -> 들어온 사람에 대해 안내인 배정
+	//  -> vip인지 아닌지 명단 조회 -> 신원 증명 -> 권한 심사 -> 출입 허가.
+	
+	// HTTP 요청 확인 -> AuthenticationManager가 심사 
+	// -> ProviderManager가 적절한 AuthenticationProvider를 선택.
+	// -> UserDetailsService에서 명단 조회(회원정보검색) 
+	// -> Authentication 객체 생성 및 SecurityContext에 저장
+	// -> AccessDecisionManager가 접근 권한 확인 -> 최종적으로 작업 접근 허용/거부
 	
 	
 }

@@ -189,6 +189,30 @@ public class WordWareHouse {
 		// HTTP 응답을 세밀하게 제어하는 도구.
 		//  -> 개발자는 클라이언트에 대한 응답을 보다 명확하게 구성할수 있음.
 		
+		// 시큐리티 객체 정리
+		// Authentication : 인증에 성공했다는 증표가 담긴 아주 중요한 객체.
+		//  -> 정보, 권한, 비밀번호같은게 여기에 다 있음.
+		
+		// 1. getAuthorities() : 인증된 사용자의 권한을 리턴하는 역할.
+		//    - 권한을 통해 사용자가 특정한 리소스에 접근할수 있는지 여부 판단
+		//      리턴타입은 Collection<? extends GrantedAuthority>
+		//    - 이 메서드는 UserDetails 인터페이스에서 정의되어있는 메서드.
+		//      사용자의 인증 및 권한 관리에서 핵심적인 역할을 수행.
+		//    - Authentication 객체를 통해 호출되거나 사용자 정보를 담고있는
+		//      UserDetails 구현 클래스에서 오버라이딩해 사용하는 경우. 이렇게 두가지 방법이 있음.
+		//    - 앞서 제시한 방법들이 맘에 안들면(개발자가 직접 사용자 정보를 관리하고싶으면)
+		//      UserDetails 인터페이스를 구현하는 클래스에서 
+		//      getAuthorities 메서드를 오버라이딩해서 사용자의 권한 정보를 리턴하도록
+		//      설정하는것도 방법.
+		
+		
+		// 2. isAccountNonExpired
+		// 3. isAccountNonLocked()
+		// 4. isCredentialsNonExpired()
+		// 5. isEnabled()
+		
+		
+		
 		
 		
 	}
