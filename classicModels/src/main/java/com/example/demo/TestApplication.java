@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import jakarta.servlet.http.HttpSession;
+
 @SpringBootApplication
 public class TestApplication {
 
@@ -461,8 +463,126 @@ public class TestApplication {
 	//     (DelegatingFilterProxy)
 	//  -> FilterChainProxy 라는 녀석이 적절한 SecurityFilterChain을 찾아서 실행.
 	//     (CSRF 토큰도 여기서 탐지)
+	//  -> 체인을 통해 다음필터로 전달을 요청.
+	
+	// 필터의 실행 순서
+	// 1. SecurityContextHolderFilter 
+	//    -> 요청이 시작되면 SecurityContext를 복원, 그리고 끝날때까지 저장.
+	// 2. CsrfFilter
+	//    -> CSRF 공격 방어 및 토큰 검증
+	// 3. LogoutFilter
+	//    -> 세션정리와 로그아웃 요청처리. 대기타고있다가 로그아웃하면 정리.
+	// 4. UsernamePasswordAuthenticationFilter 
+	//    -> Form 로그인 인증 처리.
+	// 5. FilterSecurityInterceptor 
+	//    -> URL 패턴별 접근권한 검사.(인가)
+	
+	// HttpServletRequest : 요청에대한 정보를 담고있는 객체
+	//  -> 서블릿이라는것에서 제공되는 인터페이스인데 클라이언트가 요청을 보낼때
+	//     서버 측에서 해당 요청의 정보를 처리하기위해 사용하는 객체.
+	//  -> 컨트롤러 파라미터 영역에 선언후에 사용하면 요청에 들어오는 정보들을 확인할수 있음
+	
+	// 사용 예시
+//	String val = req.getParameter("subject");
+//	String usr = req.getHeader("User-Agent");
+//	StringBuffer url = req.getRequestURL();
+//	String method = req.getMethod(); // get, post 방식 구분
+//	HttpSession session1 = req.getSession(); // 전체 세션정보
+//	// ip 정보 가져오기
+//	String cliIp = req.getRemoteAddr();
 	
 	
+	
+	// UsernamePasswordAuthenticationFilter의 상세한 동작원리(시큐리티 기본 로그인 처리과정)
+	// 1. 로그인 요청 감지(어디선가 POST 방식으로 시큐리티에서 설정한 /login 요청을 감지한 경우)
+	//    -> 언급한 요청이 감지되는순간 UsernamePasswordAuthenticationFilter가 스틸함.
+	// 2. HttpServletRequest에서 username과 password 파라미터를 추출해냄.
+	// 3. 인증 토큰 생성.
+	//    -> UsernamePasswordAuthenticationToken(unauthenticated) 객체를 생성
+	// 4. AuthenticationManager 호출 : 생성된 토큰을 AuthenticationManager로 전달.
+	// 5. Provider위임 : ProviderManager가 적절한 AuthenticationProvider를 찾아
+	//                  인증을 위임.
+	// 6. 사용자 조회 : DaoAuthenticationProvider가 UserDetailService를 호출하여 
+	//                사용자 정보를 조회.
+	// 7. 비밀번호 검증 : 사용자가 입력한 비밀번호와 저장된 비밀번호의 비교
+	// 8. 인증완료 : 성공시 인증된 Authentication 객체를 SecurityContext에 저장.
+	
+	// OAuth2(Open Authorization 2.0)
+	//  - 현대적 인증 권한 부여 프레임워크
+	//  - 사용자가 자신의 자격증명(id, pw)을 직접 제공하지 않고도
+	//    제 3자 어플리케이션(서비스)에 접근할수 있도록 허용하는 개념.
+	//  - 사용자는 자신의 계정을 보호, 서비즈 제공가는 안전하게 데이터를 공유할수 있음.
+	
+	//  - 서비스마다 일일히 계정정보를 입력해 회원가입하는것은 너무 귀찮다.
+	//  - 그래서 믿을수 있는 대형 플랫폼의 계정정보를 입력받아 회원가입을 대체하고
+	//    로그인을 처리할수 있도록 지원.
+	//  - 요약해서 얘기해보자면 옆동네 회원증이 있어도 우리서비스 이용가능해요 라는 개념.
+	
+	// OAuth2의 주요 개념.(구성요소)
+	// 1. Resource Owner
+	// 2. Client
+	// 3. Authorization Server
+	// 4. Resource Server
+	
+	// OAuth2의 동작방식(주요흐름)
+	// 1. 권한요청(플랫폼(소셜)로그인 버튼 클릭)
+	// 2. 사용자 승인
+	// 3. 인증 토큰 발급(엑세스 토큰 발급)
+	// 4. 해당 플랫폼과의 토큰교환(데이터 접근)
+	// 5. 사용자 정보 조회.
+	// 6. 문제없으면 로그인 처리.
+	
+	// 소셜 프로바이더별 특징
+	// 1. 구글
+	//    - 안정적, 구축도 쉬움
+	// 2. 카카오
+	//    - 국내서비스 한정으로는 굉장히 친화적, 구축이 생각보다 까다로움, 프로필 이미지 지원
+	// 3. 네이버
+	//    - 카카오보다는 사용빈도가 생각보다 높진않지만 그래도 안정적
+	// 4. 깃허브
+	//    - 개발자 커뮤니티라던지 개발자들을 위한 플랫폼에 많이 사용하는편
+	//      이메일의 별도 권한 요청을 받아야하는 불편함이 있음. 
+	
+	
+	// JWT(JSON Web Token) : 또다른 인증 토큰 
+	// UPA기반의 토큰이 일반 쿠키라 치면 JWT는 한번 굽고나면 누가 만들었는지 언제 만들었는지
+	// 누구것인지 모든 정보가 쿠키안에 새겨져있어서 위조가 불가능한 쿠키 같은 느낌.
+	
+	// JWT는 해당 서비스 한정으로는 인증에 대해서는 지속적으로 유지가 가능.
+	
+	// JWT 구조도 
+	// 1. Header(라벨층) : 토큰의 타입과 서명 알고리즘을 명시.
+	//     - HMAC SHA-256(HS256)
+	// 2. Payload(속재료층) : 사용자의 정보와 사용자의 정보를 설명하는 메타데이터를 포함.(클레임)
+	//     2-1 Registered Claims : JWT 표준에서 정의된 클레임(iss, sub, exp 등등)
+	//     2-2 Public Claims : URI 형식으로 정의된 공개 클레임
+	//     2-3 Private Claims : 서버와 클라이언트 간 합의된 비공개 클레임.
+	//     주의사항 : JWT 토큰을 발급할때 민감정보는 Payload에 절대로 담아선 안됨.
+	// 3. Signature(서명층) : Header + Payload -> 결합후 비밀키로 서명한 값.
+	//     -> 위변조 방지용 + 무결성 보장용
+	//     -> 서명된 내용을 원래 데이터로 되돌리는것은 거의 불가능.
+	//     -> 그래서 같은 데이터와 키로 다시 서명을 생성한 후에 비교하는 방식을 사용.
+	
+	// 고대 유물코드 과거에는 요청과 응답을 이런식으로 처리했고
+	// 보안회사의 경우는 아직도 서블릿을 깊게활용하여 처리.
+//	public class MyServlet extends HttpServlet {
+//	    @Override
+//	    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//	        // 요청 파라미터 가져오기
+//	        String name = request.getParameter("name");
+//
+//	        // 헤더 정보 가져오기
+//	        String userAgent = request.getHeader("User-Agent");
+//
+//	        // 세션 가져오기
+//	        HttpSession session = request.getSession();
+//
+//	        // 응답 작성
+//	        response.setContentType("text/html");
+//	        response.getWriter().println("<h1>Hello, " + name + "</h1>");
+//	        response.getWriter().println("<p>Your User-Agent: " + userAgent + "</p>");
+//	    }
+//	}	
 	
 	
 	
