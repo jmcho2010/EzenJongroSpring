@@ -507,6 +507,13 @@ public class TestApplication {
 	// 7. 비밀번호 검증 : 사용자가 입력한 비밀번호와 저장된 비밀번호의 비교
 	// 8. 인증완료 : 성공시 인증된 Authentication 객체를 SecurityContext에 저장.
 	
+	//UserDetailsService : 인증을 시도하는 사용자의 정보를 데이터베이스 메모리나 다른 외부시스템에서
+	//                      로드한후 UserDetails 객체로 리턴해주는 인터페이스.
+	//  -> 사용자 인증 및 권한 부여를 처리하기 위해 제공되는 핵심 인터페이스.
+	//  -> 사용자의 인증 상태와 권한 정보를 관리하는데 사용하는 객체.
+	
+	// loadUserByUsername 메서드를 통해 사용자 정보를 검색하고 UserDetails 객체를 리턴.
+	
 	// OAuth2(Open Authorization 2.0)
 	//  - 현대적 인증 권한 부여 프레임워크
 	//  - 사용자가 자신의 자격증명(id, pw)을 직접 제공하지 않고도

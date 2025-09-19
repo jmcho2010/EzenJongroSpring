@@ -240,8 +240,65 @@ public class WordWareHouse {
 		//   - authenticate() : 인증을 처리하는 유일한 메서드. 
 		//     내부적으로 적절한 Provider를 서치후 인증위임
 		
+		// @ElementCollection
+		//  -> 엔티티 클래스에서 기본값 타입의 컬렉션 프레임워크를 매핑할때 사용.
+		//  -> 독립적인 테이블에 저장.
+		// @Enumerated(EnumType.STRING) 
+		//  -> Enum타입의 데이터베이스 저장 방식 지정.
+		//  -> Enum의 이름을 문자열로 저장하라!
+		// @CollectionTable
+		//  -> 컬렉션 데이터를 저장할 별도의 테이블을 정의할때 사용
+		
+		// @PreAuthorize : 메서드 수준의 보안을 구현하는 기능.
+		//  -> 가장 대중적으로 많이 활용됨 (이유 : 가장 유연한 메서드 보안 제공)
+		// 1. isAuthenticated() : 인증여부 확인 / 로그인 했는가 안했는가?
+		// 2. hasRole() :  특정 역할 보유 확인
+		// 3. hasAnyRole('VIP', 'ADMIN') // 이중 하나라도 포함되어있는가 여부.
+		// 4. ("#username == principal.username") / 현재 사용자 확인.
+		
+		// @PostAuthorize : 메서드를 실행한후에 리턴한 결과를 기반으로 접근권한을 검증하는데 사용.
+		// @PreFilter/@PostFilter
+		// PreFilter : 메서드가 호출되기 전에 컬렉션이나 배열을 필터링할때 사용
+		//  -> 메서드가 호출되기전에 전달된 파라미터중 특정조건을 만족하지 않는 항목들을 제거.
+		
+//		@PreFilter("filterObject.startsWith('ROLE_')")
+//		public void processRoles(List<String> roles) {
+//		    // roles 리스트는 'ROLE_'로 시작하는 항목들만 포함됩니다.
+//		    roles.forEach(System.out::println);
+//		}
+		// PostFilter : 메서드 실행 후 리턴된 컬렉션이나 배열을 필터링할때 사용.
+		//  -> 메서드 리턴값중에 특정조건을 만족하지 않는 항목들은 지우고봄.
+		
+//		@PostFilter("filterObject.startsWith('ROLE_')")
+//		public List<String> getRoles() {
+//		    return List.of("ROLE_ADMIN", "USER", "ROLE_USER", "GUEST");
+//		}		
 		
 		
+		// @Secured : 특정 메서드나 클래스에 대해 접근권한 제어시 사용.
+		//  -> 특정 역할을 가진 사용자만 해당 메서드나 클래스에 접근할수 있도록 제한할수 있음.
+		// 사용 전제 조건 : @EnableGlobalMethodSecurity(securedEnabled = true) <== 필요
+		//  -> SecurityConfig에서 저 어노테이션이 있어야 사용가능.
+		//
+//	    @Secured("ROLE_ADMIN")
+//	    public void adminOnlyMethod() {
+//	        System.out.println("관리자만 접근할 수 있는 메서드입니다.");
+//	    }
+//
+//	    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+//	    public void userAndAdminMethod() {
+//	        System.out.println("사용자와 관리자 모두 접근할 수 있는 메서드입니다.");
+//	    }
+		
+		// hasrole과 차이점
+		// Secured : 단순한 역할 기반 접근제어 제공.
+		//  -> 복잡한 조건 표현에는 부적합.
+		// hasRole : 권한도 권한인데 좀더 복잡하게 다른 SpEL과 연계하여 사용이 가능.
+
+//		@PreAuthorize("hasRole('ADMIN') and #user.id == authentication.principal.id")
+//		public void adminOnlyForUser(User user) {
+//		    // 특정 사용자만 접근
+//		}		
 		
 		
 		
