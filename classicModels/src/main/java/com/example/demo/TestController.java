@@ -32,7 +32,8 @@ public class TestController {
 	
 	@Autowired
 	private UserRepository userRepository;
-
+	
+	
 	@GetMapping("/test1")
 	public String hi() {
 		return "test";
@@ -145,7 +146,9 @@ public class TestController {
 		return String.format("redirect:/show/%s", id);
 	}
 	
-	
+	public static void tetst() {
+		System.out.println("test111");
+	}
 	
 	
 	

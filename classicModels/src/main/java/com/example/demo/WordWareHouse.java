@@ -300,8 +300,41 @@ public class WordWareHouse {
 //		    // 특정 사용자만 접근
 //		}		
 		
+//   @RequestBody : 요청들어올때 그 본문을 Java객체로 변환해주는 어노테이션.		
+//		POST /api/users HTTP/1.1
+//		Host: localhost:8081
+//		Content-Type: application/json
+//		Content-Length: 85
+//
+//		{
+//		  "username": "john",
+//		  "email": "john@example.com",
+//		  "age": 30
+//		}	
+//       
+		// 주로 Ajax같은 비동기방식으로 요청할때(JSON데이터가 들어온다면)
+//		JSON 문자열 → HttpMessageConverter → Java 객체
+//		{                                      User user = new User();
+//		  "username": "john",        →         user.setUsername("john");
+//		  "email": "john@...",                 user.setEmail("john@...");
+//		  "age": 30                            user.setAge(30);
+//		}		
+
+// 리플렉션 : 실행중에 클래스의 정보를 거울로 들여다 보는 개념.
+//  -> 프로그램이 실행되는 동안 클래스, 메서드, 필드등의 정보를 동적으로 조사하고 조작할수 있는 기능.
+		// 평소에는 이렇게 사용
+//		Person person = new Person();
+//		person.setName("홍길동");  // 직접 메소드 호출
+//
+//		// 리플렉션은 거울을 통해 보는 것
+//		Class<?> clazz = Person.class;        // 거울로 Person 클래스 보기
+//		Method setName = clazz.getMethod("setName", String.class);  // 메소드 찾기
+//		setName.invoke(person, "홍길동");     // 거울을 통해 메소드 실행		
 		
-		
+// 기능만 보면 굉장히 좋아보이지만 정말 조심해서 사용해야함.
+//  -> 어노테이션 처리나 동적 객체를 생성할때 사용 유연하다는 장점이 있지만
+//     느리고, 복잡하고 타입 안전성도 부족하면서 유지보수가 어렵다는 단점도 있기때문에
+//     필요한 경우만 써야함.
 		
 		
 	}

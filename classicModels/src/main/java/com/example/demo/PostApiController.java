@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class PostApiController {
 	private final PostService postService;
 	
 	@GetMapping
+	@ResponseBody
 	public ResponseEntity<List<Post>> getAllposts(){
 		Page<Post> postPage = postService.findAll("", 0);
 		List<Post> posts = postPage.getContent();

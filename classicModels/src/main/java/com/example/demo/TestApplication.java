@@ -587,6 +587,115 @@ public class TestApplication {
 	// 5. 쿠키 검증 : 서버는 요청이 올때마다 첨부된 쿠키의 서명을 비밀 키로 함.
 	// 6. 권한 확인 : 쿠키가 유효하면 서버는 그안에 담긴 권한 정보를 보고 요청을 처리.
 	
+	// 구현한 OAuth2기반 JWT 토큰 발급 로그인 방식 구현의 흐름.
+	// 사용자 -> 브라우저 -> spring App -> OAuth2 인증 -> JWT 생성 -> 인증 완료
+	
+	// 1. 로그인 페이지 접근
+	//  -> 사용자 http://localhost:8081/club/login
+	// 2. 인증 로그인 버튼 클릭.
+	//  -> 브라우저 (구글인증)
+//	https://accounts.google.com/oauth/authorize?
+//		  response_type=code&
+//		  client_id=974734557516-0qggtibs96jdl0io6d4h8b5rb0o6j2eo.apps.googleusercontent.com&
+//		  scope=openid%20profile%20email&
+//		  state=abc123&
+//		  redirect_uri=http://localhost:8081/login/oauth2/code/google
+	// 3. OAuth2 Provider를 통한 리다이렉트
+	//  -> 시큐리티 -> https://accounts.google.com/oauth/authorize?.
+	// 4. 사용자 인증
+	//  -> 사용자의 정보를 넘겨 구글 인증서버와 contact
+	// 5. 인증 코드 리턴.
+	//  -> Google → http://localhost:8081/login/oauth2/code/google?code=abc123
+	// 6. 엑세스 토큰 교환
+	//  시큐리티와 구글 토큰서버간 교환
+	
+//	POST https://oauth2.googleapis.com/token
+//		Content-Type: application/x-www-form-urlencoded
+//
+//		code=4/0AX4XfWh...&
+//		client_id=974734557516-...&
+//		client_secret=GOCSPX-...&
+//		redirect_uri=http://localhost:8081/login/oauth2/code/google&
+//		grant_type=authorization_code
+//	
+	
+	// 7. 시큐리티는 사용자 정보를 획득
+	//  시큐리티 <- Google User Info API
+//	GET https://www.googleapis.com/oauth2/v2/userinfo
+//		Authorization: Bearer ya29.a0ARrdaM...
+//	{
+//		  "id": "346546354311114798",
+//		  "email": "nureongi@gmail.com", 
+//		  "name": "누렁이",
+//		  "picture": "https://lh3.googleusercontent.com/..."
+//		}
+	//  ========= OAuth가 하는일은 일단 여기까지(대부분은 여기서 끝) ===========
+	// 8. JWT 토큰 생성 및 쿠키 설정.
+	// 9. JWT 토큰 생성이 내부에서 진행.
+	// 10. 중간 페이지 처리.
+	// 11. JavaScript 쿠키 설정.
+	// 12. 최종 목적지 접근 
+	//     -> 기본적으로 시큐리티가 있다면 요청들은 security filterChain을 통과하는게 기본.
+	// 13. JWT 필터에서 인증 확인.
+	// 14. JWT 토큰 검증
+	// 15. 메인페이지 접근.
+	
+	// 핵심포인트.
+	//	1. OAuth2 단계 (외부 인증)
+	//	사용자 → OAuth2 Provider (Google, Kakao)
+	//	인증 코드 획득
+	//	액세스 토큰 교환
+	//	사용자 정보 획득
+	//	2. JWT 단계 (내부 인증)
+	//	JWT 토큰 생성 (사용자 정보 → JWT)
+	//	쿠키에 저장 (브라우저)
+	//	요청 시 JWT 추출 (필터)
+	//	JWT 검증 및 인증 (SecurityContext)
+	//	3. 중요한 설정들
+	//	쿠키 이름: "jwt" (대소문자 일치 필수)
+	//	리다이렉트 URI: OAuth2 콘솔과 서버 포트 일치
+	//	매개변수 이름: @RequestParam("token") 명시적 지정	
+	
+	// 그렇다면 시큐리티는 인증시 어떻게 동작하고 있는가?
+	
+//	1. SecurityContextHolderFilter
+//	2. HeaderWriterFilter  
+//	3. OAuth2AuthorizationRequestRedirectFilter
+//	4. OAuth2LoginAuthenticationFilter
+//	5. JwtAuthenticationFilter ← 우리가 추가한 필터
+//	6. UsernamePasswordAuthenticationFilter
+//	7. AnonymousAuthenticationFilter
+//	8. SessionManagementFilter
+//	9. ExceptionTranslationFilter
+//	10. AuthorizationFilter
+	
+// 복합적인 전체 인증 흐름 요약
+//	1. OAuth2 인증 성공
+//	   ↓
+//	2. OAuth2AuthenticationToken 생성 (Google/Kakao 사용자 정보 포함)
+//	   ↓  
+//	3. JWT 토큰 생성 (사용자 ID + 권한 정보 암호화)
+//	   ↓
+//	4. 브라우저 쿠키에 JWT 저장
+//	   ↓
+//	5. 다음 요청 시 JWT 추출
+//	   ↓
+//	6. JWT 검증 (서명 + 만료시간)
+//	   ↓
+//	7. Claims에서 사용자 정보 추출  
+//	   ↓
+//	8. UsernamePasswordAuthenticationToken 생성
+//	   ↓
+//	9. SecurityContext에 저장
+//	   ↓
+//	10. @PreAuthorize, @Secured 등에서 권한 검사 가능
+	
+	
+	
+	
+	
+	
+	
 	// 고대 유물코드 과거에는 요청과 응답을 이런식으로 처리했고
 	// 보안회사의 경우는 아직도 서블릿을 깊게활용하여 처리.
 //	public class MyServlet extends HttpServlet {
