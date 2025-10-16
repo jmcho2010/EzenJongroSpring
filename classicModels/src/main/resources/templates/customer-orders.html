@@ -1,0 +1,40 @@
+<div class="flash-notice">
+    <strong>화면 깜빡임 확인해보기</strong> 
+</div>
+
+<a href="/customer/list" class="back-link">← 고객 목록으로 돌아가기</a>
+<!--
+<div class="customer-info" th:if="${customer}">
+    <h2 th:text="${customer.customerName}">고객명</h2>
+    <p><strong>고객번호:</strong> <span th:text="${customer.customerNumber}"></span></p>
+    <p><strong>연락처:</strong> <span th:text="${customer.phone}"></span></p>
+    <p><strong>국가:</strong> <span th:text="${customer.country}"></span></p>
+</div>
+-->
+<div th:if="${orders != null and !orders.isEmpty()}">
+    <table>
+        <thead>
+            <tr>
+                <th>주문번호</th>
+                <th>주문일</th>
+                <th>배송요청일</th>
+                <th>배송일</th>
+                <th>상태</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.orderNumber}">10100</td>
+                <td th:text="${order.orderDate}">2023-01-01</td>
+                <td th:text="${order.requiredDate}">2023-01-05</td>
+                <td th:text="${order.shippedDate != null ? order.shippedDate : '미배송'}">2023-01-03</td>
+                <td>
+                    <span th:text="${order.status}" 
+                          th:style="${order.status == 'Shipped' ? 'color: green; font-weight: bold;' : 'color: orange;'}">
+                        상태
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

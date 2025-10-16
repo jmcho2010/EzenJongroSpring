@@ -154,6 +154,8 @@ public class PostService {
 	@Transactional
 	public void recommend(Post post, SiteUser user) {
 		// TODO Auto-generated method stub
+		TestController.tetst();
+		
 		if(post.getRecommendation().contains(user)) {// 만약에~ 이미 추천을 했던 유저라면
 			post.getRecommendation().remove(user);
 		}else {

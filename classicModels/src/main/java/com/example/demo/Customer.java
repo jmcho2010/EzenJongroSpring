@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -58,6 +59,9 @@ public class Customer {
     @Column(name = "salesRepEmployeeNumber")
     private Integer salesRepEmployeeNumber;
 	
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Order> orders;
+    
     // predcision = 숫자 타입에서 전체 자릿수 지정
     //  -> 최대 10자리 숫자 지정
     // scale : 소수점 이하 자리수 지정

@@ -34,19 +34,21 @@ class TestApplicationTests {
 	void contextLoads() {
 		// Post 클래스를 기반으로 객체를 만들고 활용해보기.
 //		List<Customer> lists=this.customerRepository.findAll();
-//		System.out.println(lists.toString());
+//		System.out.println("실행결과" + lists.toString());
 		
+		Customer lists=this.customerRepository.findById(103)
+        .orElseThrow(() -> new RuntimeException("고객을 찾을 수 없습니다: " + 103));
 		
 		//List<Customer> lists = customerRepository.findAllNative();
 		//lists.forEach(System.out::println);
 		
-		BigDecimal jolrakum = new BigDecimal("100.00");
-		
-		List<Product> result = productRepository.findProduct1(jolrakum);
-		
-		//System.out.println(result);
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
+//		BigDecimal jolrakum = new BigDecimal("100.00");
+//		
+//		List<Product> result = productRepository.findProduct1(jolrakum);
+//		
+//		//System.out.println(result);
+//		assertThat(result).isNotNull();
+//		assertThat(result).isNotEmpty();
 		
 		
 		
